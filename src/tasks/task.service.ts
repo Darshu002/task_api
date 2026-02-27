@@ -2,6 +2,7 @@ import { Repository } from 'typeorm';
 import { Task } from './task.entity';
 import { CreateTaskDto, UpdateTaskDto } from './task.dto';
 import { TaskStatus, PaginationQuery, PaginatedResponse } from '../types';
+type HttpError = Error & { status?: number };
 export class TaskService {
   constructor(private readonly taskRepository: Repository<Task>) {}
 
@@ -31,8 +32,8 @@ export class TaskService {
     const task = await this.taskRepository.findOne({ where: { id } });
 
     if (!task) {
-      const error = new Error(`Task with ID ${id} not found`);
-      (error as any).status = 404;
+      const error: HttpError = new Error(`Task with ID ${id} not found`);
+      error.status = 404;
       throw error;
     }
 

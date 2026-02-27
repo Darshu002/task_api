@@ -1,15 +1,9 @@
-/**
- * Task CRUD Tests
- * Tests all task endpoints with mocked database repository
- */
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { AppDataSource } from '../src/database/data-source';
 import { Task } from '../src/tasks/task.entity';
 import { TaskStatus } from '../src/types';
 import { Application } from 'express';
-
-// ─── Mock Repository ──────────────────────────────────────────────────────────
 
 const mockTask: Task = {
   id: 1,
@@ -37,15 +31,12 @@ jest.mock('../src/database/data-source', () => ({
   },
 }));
 
-// ─── Setup ────────────────────────────────────────────────────────────────────
-
 let app: Application;
 let authToken: string;
 
 beforeAll(async () => {
   app = createApp();
 
-  // Get a valid auth token for all protected requests
   const loginRes = await request(app)
     .post('/auth/login')
     .send({ username: 'admin', password: 'adminpass' });
@@ -57,12 +48,8 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-// ─── Helper ───────────────────────────────────────────────────────────────────
-
 const authReq = (method: 'get' | 'post' | 'patch' | 'delete', url: string) =>
   request(app)[method](url).set('Authorization', `Bearer ${authToken}`);
-
-// ─── GET /tasks ───────────────────────────────────────────────────────────────
 
 describe('GET /tasks', () => {
   it('should return paginated tasks', async () => {
@@ -102,8 +89,6 @@ describe('GET /tasks', () => {
   });
 });
 
-// ─── GET /tasks/:id ───────────────────────────────────────────────────────────
-
 describe('GET /tasks/:id', () => {
   it('should return a task by ID', async () => {
     mockRepo.findOne.mockResolvedValueOnce(mockTask);
@@ -128,8 +113,6 @@ describe('GET /tasks/:id', () => {
     expect(res.status).toBe(400);
   });
 });
-
-// ─── POST /tasks ──────────────────────────────────────────────────────────────
 
 describe('POST /tasks', () => {
   it('should create a new task with title only', async () => {
@@ -192,8 +175,6 @@ describe('POST /tasks', () => {
   });
 });
 
-// ─── PATCH /tasks/:id ─────────────────────────────────────────────────────────
-
 describe('PATCH /tasks/:id', () => {
   it('should update a task partially', async () => {
     const updated = { ...mockTask, title: 'Updated Title' };
@@ -223,8 +204,6 @@ describe('PATCH /tasks/:id', () => {
     expect(res.status).toBe(400);
   });
 });
-
-// ─── DELETE /tasks/:id ────────────────────────────────────────────────────────
 
 describe('DELETE /tasks/:id (soft delete)', () => {
   it('should soft delete a task', async () => {

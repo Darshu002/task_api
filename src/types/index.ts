@@ -1,16 +1,13 @@
-
 export enum TaskStatus {
   PENDING = 'pending',
   IN_PROGRESS = 'in-progress',
   COMPLETED = 'completed',
 }
 
-
 export interface PaginationQuery {
   page?: number;
   limit?: number;
 }
-
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -22,7 +19,6 @@ export interface PaginatedResponse<T> {
   };
 }
 
-
 export interface ApiResponse<T = unknown> {
   success: boolean;
   message?: string;
@@ -30,14 +26,12 @@ export interface ApiResponse<T = unknown> {
   error?: string;
 }
 
-
 export interface JwtPayload {
   sub: number;
   username: string;
   iat?: number;
   exp?: number;
 }
-
 
 declare global {
   namespace Express {
