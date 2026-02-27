@@ -10,12 +10,8 @@ import { Task } from './task.entity';
 
 const router = Router();
 
-// All task routes require authentication
 router.use(authMiddleware);
 
-/**
- * Helper: validate DTO and return errors array (empty = valid)
- */
 async function validateDto(dtoInstance: object): Promise<string[]> {
   const errors = await validate(dtoInstance, {
     whitelist: true,
@@ -24,11 +20,6 @@ async function validateDto(dtoInstance: object): Promise<string[]> {
   return errors.flatMap((e) => Object.values(e.constraints || {}));
 }
 
-/**
- * GET /tasks
- * Retrieve all tasks with pagination
- * Query params: page (default 1), limit (default 10)
- */
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const service = new TaskService(AppDataSource.getRepository(Task));
@@ -45,10 +36,6 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-/**
- * GET /tasks/:id
- * Retrieve a specific task by ID
- */
 router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -65,11 +52,6 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-/**
- * POST /tasks
- * Create a new task
- * Body: { title (required), description?, status?, completed_at? }
- */
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const dto = plainToInstance(CreateTaskDto, req.body);
@@ -88,11 +70,6 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-/**
- * PATCH /tasks/:id
- * Partially update a task
- * Body: { title?, description?, status?, completed_at? }
- */
 router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -117,10 +94,6 @@ router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => 
   }
 });
 
-/**
- * DELETE /tasks/:id
- * Soft delete a task (sets deleted_at, data is preserved in DB)
- */
 router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id, 10);

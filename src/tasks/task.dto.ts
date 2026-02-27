@@ -7,13 +7,6 @@ import {
   IsDateString,
 } from 'class-validator';
 import { TaskStatus } from '../types';
-
-/**
- * DTO for creating a new task
- * - title is required
- * - description is optional
- * - status defaults to 'pending' if not provided
- */
 export class CreateTaskDto {
   @IsString()
   @IsNotEmpty({ message: 'Title is required' })
@@ -35,9 +28,6 @@ export class CreateTaskDto {
   completed_at?: string;
 }
 
-/**
- * DTO for partially updating a task (all fields optional)
- */
 export class UpdateTaskDto {
   @IsOptional()
   @IsString()

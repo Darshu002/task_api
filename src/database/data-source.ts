@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER || 'postgres',
   password: '111',
   database: process.env.DB_NAME || 'task_api',
-  synchronize: process.env.NODE_ENV !== 'production', 
+  synchronize: process.env.NODE_ENV !== 'production',
   logging: process.env.NODE_ENV === 'development',
   entities: [Task],
   migrations: [],

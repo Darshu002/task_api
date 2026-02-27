@@ -2,18 +2,10 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { findUserByUsername } from './auth.users';
 import { JwtPayload } from '../types';
-
-/**
- * Login DTO — validated before reaching this service
- */
 export interface LoginDto {
   username: string;
   password: string;
 }
-
-/**
- * AuthService handles login and token generation.
- */
 export class AuthService {
   private readonly jwtSecret: string;
   private readonly jwtExpiresIn: string;
@@ -23,10 +15,6 @@ export class AuthService {
     this.jwtExpiresIn = process.env.JWT_EXPIRES_IN || '1h';
   }
 
-  /**
-   * Validate credentials and return a signed JWT.
-   * @throws Error with status 401 on invalid credentials
-   */
   async login(dto: LoginDto): Promise<{ access_token: string }> {
     const { username, password } = dto;
 
@@ -52,10 +40,6 @@ export class AuthService {
     return { access_token };
   }
 
-  /**
-   * Verify a JWT token and return the decoded payload.
-   * @throws Error with status 401 on invalid/expired token
-   */
   verifyToken(token: string): JwtPayload {
     try {
       return jwt.verify(token, this.jwtSecret) as JwtPayload;
@@ -73,5 +57,4 @@ export class AuthService {
   }
 }
 
-// Singleton instance
 export const authService = new AuthService();

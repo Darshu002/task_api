@@ -1,9 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-
-/**
- * Global error handling middleware.
- * Catches all errors passed via next(err) and returns a consistent JSON response.
- */
 export function errorMiddleware(
   err: any,
   _req: Request,

@@ -1,13 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { authService } from '../auth/auth.service';
-
-/**
- * authMiddleware - protects routes by requiring a valid Bearer JWT.
- *
- * Expects: Authorization: Bearer <token>
- * On success: attaches decoded payload to req.user
- * On failure: returns 401 Unauthorized
- */
 export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
   const authHeader = req.headers.authorization;
 
