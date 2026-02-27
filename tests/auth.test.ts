@@ -1,7 +1,3 @@
-/**
- * Authentication Tests
- * Tests login endpoint, JWT validation, and protected route access
- */
 import request from 'supertest';
 import { createApp } from '../src/app';
 import { AppDataSource } from '../src/database/data-source';
@@ -9,7 +5,6 @@ import { Application } from 'express';
 
 let app: Application;
 
-// Mock the database so tests don't need a real PostgreSQL connection
 jest.mock('../src/database/data-source', () => ({
   AppDataSource: {
     initialize: jest.fn().mockResolvedValue(undefined),
@@ -114,7 +109,6 @@ describe('Protected routes (JWT required)', () => {
   });
 
   it('should allow access to /tasks with valid token', async () => {
-    // First, get a valid token
     const loginRes = await request(app)
       .post('/auth/login')
       .send({ username: 'user1', password: 'password1' });

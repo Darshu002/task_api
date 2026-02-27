@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { findUserByUsername } from './auth.users';
 import { JwtPayload } from '../types';
+type HttpError = Error & { status?: number };
 export interface LoginDto {
   username: string;
   password: string;
@@ -20,21 +21,25 @@ export class AuthService {
 
     const user = findUserByUsername(username);
     if (!user) {
-      this.throwUnauthorized();
+      const error: HttpError = new Error('Invalid username or password');
+      error.status = 401;
+      throw error;
     }
 
-    const isMatch = await bcrypt.compare(password, user!.passwordHash);
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
-      this.throwUnauthorized();
+      const error: HttpError = new Error('Invalid username or password');
+      error.status = 401;
+      throw error;
     }
 
     const payload: JwtPayload = {
-      sub: user!.id,
-      username: user!.username,
+      sub: user.id,
+      username: user.username,
     };
 
     const access_token = jwt.sign(payload, this.jwtSecret, {
-      expiresIn: this.jwtExpiresIn as any,
+      expiresIn: this.jwtExpiresIn,
     });
 
     return { access_token };
@@ -44,16 +49,10 @@ export class AuthService {
     try {
       return jwt.verify(token, this.jwtSecret) as JwtPayload;
     } catch {
-      const error = new Error('Invalid or expired token');
-      (error as any).status = 401;
+      const error: HttpError = new Error('Invalid or expired token');
+      error.status = 401;
       throw error;
     }
-  }
-
-  private throwUnauthorized(): never {
-    const error = new Error('Invalid username or password');
-    (error as any).status = 401;
-    throw error;
   }
 }
 

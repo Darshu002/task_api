@@ -4,7 +4,6 @@ import taskRouter from './tasks/task.router';
 import authRouter from './auth/auth.router';
 import { errorMiddleware } from './middleware/error.middleware';
 
-
 export function createApp(): Application {
   const app = express();
 

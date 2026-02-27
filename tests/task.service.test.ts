@@ -1,12 +1,6 @@
-/**
- * Unit Tests for TaskService
- * Tests business logic directly with mocked TypeORM repository
- */
 import { TaskService } from '../src/tasks/task.service';
 import { TaskStatus } from '../src/types';
 import { Task } from '../src/tasks/task.entity';
-
-// ─── Mock Repository ──────────────────────────────────────────────────────────
 
 const mockRepo = {
   findAndCount: jest.fn(),
@@ -33,8 +27,6 @@ beforeEach(() => {
   jest.clearAllMocks();
   service = new TaskService(mockRepo as any);
 });
-
-// ─── findAll ─────────────────────────────────────────────────────────────────
 
 describe('TaskService.findAll', () => {
   it('should return paginated results', async () => {
@@ -71,8 +63,6 @@ describe('TaskService.findAll', () => {
   });
 });
 
-// ─── findOne ─────────────────────────────────────────────────────────────────
-
 describe('TaskService.findOne', () => {
   it('should return a task when found', async () => {
     mockRepo.findOne.mockResolvedValueOnce(mockTask);
@@ -92,8 +82,6 @@ describe('TaskService.findOne', () => {
   });
 });
 
-// ─── create ──────────────────────────────────────────────────────────────────
-
 describe('TaskService.create', () => {
   it('should create task with pending status by default', async () => {
     const task = { ...mockTask, status: TaskStatus.PENDING };
@@ -111,7 +99,6 @@ describe('TaskService.create', () => {
 
     await service.create({ title: 'Done', status: TaskStatus.COMPLETED });
 
-    // completed_at should have been set before save
     const savedTask = mockRepo.save.mock.calls[0][0];
     expect(savedTask.completed_at).toBeInstanceOf(Date);
   });
@@ -131,8 +118,6 @@ describe('TaskService.create', () => {
     expect(mockRepo.save).toHaveBeenCalled();
   });
 });
-
-// ─── update ──────────────────────────────────────────────────────────────────
 
 describe('TaskService.update', () => {
   it('should update task fields', async () => {
@@ -160,8 +145,6 @@ describe('TaskService.update', () => {
     });
   });
 });
-
-// ─── softDelete ──────────────────────────────────────────────────────────────
 
 describe('TaskService.softDelete', () => {
   it('should soft delete existing task', async () => {
