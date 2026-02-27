@@ -5,8 +5,8 @@ export function errorMiddleware(
   res: Response,
   _next: NextFunction
 ): void {
-  const status: number = err.status || err.statusCode || 500;
-  const message: string = err.message || 'Internal Server Error';
+  const status = err.status || err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
 
   console.error(`[Error] ${status} - ${message}`, err.stack ? `\n${err.stack}` : '');
 

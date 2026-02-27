@@ -11,11 +11,11 @@ async function bootstrap(): Promise<void> {
   try {
     console.log('Connecting to database...');
     await AppDataSource.initialize();
-    console.log(' Database connected successfully');
+    console.log('Database connected');
 
     const app = createApp();
     app.listen(PORT, () => {
-      console.log(`running on http://localhost:${PORT}`); 
+      console.log(`Listening on http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
